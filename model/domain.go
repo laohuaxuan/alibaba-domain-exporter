@@ -20,7 +20,7 @@ const (
 	ScrapeInterval = 6 * time.Hour //每6小时刷新
 )
 
-type DomainRecord struct {
-	DomainName string
-	Expiry     time.Time
-}
+// type DomainRecord struct {
+// 	DomainName string
+// 	Expiry     time.Time
+// }
