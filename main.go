@@ -17,7 +17,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+// 启动时间
+var startTime time.Time
+
 func main() {
+	startTime = time.Now()
 	//从环境变量读取AK/SK
 	accessKeyID := os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")
 	accessKeySecret := os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
@@ -44,10 +48,15 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Domain Expiry Exporter"})
 	})
+
 	//健康检查
 	r.GET("/health", func(c *gin.Context) {
-
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+			"uptime": time.Since(startTime).String(),
+		})
 	})
+
 	//指标抓取
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	port := os.Getenv("PORT")
